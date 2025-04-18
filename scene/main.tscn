@@ -1,0 +1,217 @@
+[gd_scene load_steps=28 format=3 uid="uid://xwvqhrmvw5od"]
+
+[ext_resource type="Shader" path="res://outline.gdshader" id="1_gxvhg"]
+[ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://joystick/virtual_joystick.tscn" id="5_3182p"]
+[ext_resource type="Texture2D" uid="uid://cnwqowtgt1xfj" path="res://textures/display/hand/normal.png" id="7_64030"]
+[ext_resource type="Texture2D" uid="uid://1t8qkmk14l60" path="res://textures/display/run/pressed.png" id="7_dsqgv"]
+[ext_resource type="Texture2D" uid="uid://c4w4xq0q6d57h" path="res://IMG_20240402_165637-removebg-preview.png" id="7_j3s02"]
+[ext_resource type="Texture2D" uid="uid://bg3wbho2t266o" path="res://textures/display/hand/pressed.png" id="8_7j3a3"]
+[ext_resource type="Texture2D" uid="uid://b5ajv3a4mrc37" path="res://StandButton.png" id="8_ef66n"]
+[ext_resource type="Texture2D" uid="uid://d2l3i4upetgdf" path="res://textures/display/jump/normal.png" id="8_f2ggm"]
+[ext_resource type="Texture2D" uid="uid://dcx01demupcsm" path="res://textures/display/Crosshair/crosshair037.png" id="9_n1kko"]
+[ext_resource type="Texture2D" uid="uid://wo5jys3mruns" path="res://textures/display/jump/pressed.png" id="9_sauto"]
+[ext_resource type="Texture2D" uid="uid://2c6ts7sg3u34" path="res://CrouchButton (1).png" id="9_tnfrb"]
+[ext_resource type="PackedScene" uid="uid://kicjwmh02uwf" path="res://scenes/player.tscn" id="10_f0vyi"]
+[ext_resource type="Texture2D" uid="uid://bglx1mti15ydx" path="res://IMG_20240402_165612-removebg-preview.png" id="10_lgv21"]
+
+[sub_resource type="Gradient" id="Gradient_g0ua2"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k1nhm"]
+gradient = SubResource("Gradient_g0ua2")
+fill_to = Vector2(0.743521, 0.873727)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_12dhm"]
+sky_curve = 0.0803831
+sky_energy_multiplier = 0.0
+ground_curve = 1e-05
+ground_energy_multiplier = 0.0
+sun_angle_max = 33.9
+
+[sub_resource type="Sky" id="Sky_xwrif"]
+sky_material = SubResource("ProceduralSkyMaterial_12dhm")
+radiance_size = 0
+
+[sub_resource type="Environment" id="Environment_bkvmc"]
+background_mode = 2
+sky = SubResource("Sky_xwrif")
+reflected_light_source = 2
+fog_light_color = Color(0.54902, 0.788235, 1, 1)
+fog_light_energy = 2.7
+fog_density = 0.0003
+adjustment_color_correction = SubResource("GradientTexture2D_k1nhm")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n44b8"]
+albedo_color = Color(0.188235, 0.0627451, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7o0f6"]
+material = SubResource("StandardMaterial3D_n44b8")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_5dviu"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xjft4"]
+shader = ExtResource("1_gxvhg")
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/width = 10.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hog30"]
+load_path = "res://.godot/imported/pressed.png-b97d3a3dcbc3de6b5c284c84c5479ecc.ctex"
+
+[sub_resource type="BoxMesh" id="BoxMesh_s1uer"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mmvkt"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qfo0i"]
+radius = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sfgq4"]
+radius = 0.3
+
+[node name="main" type="Node3D"]
+
+[node name="Ground" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Ground"]
+environment = SubResource("Environment_bkvmc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Ground"]
+transform = Transform3D(-0.803919, -0.515059, 0.29737, -0.420544, 0.845851, 0.328144, -0.420544, 0.138744, -0.896601, -0.322698, 4.67816, -2.35358)
+directional_shadow_mode = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(3.408, 0, 0, 0, 1, 0, 0, 0, 21.25, 0, 0, 0)
+mesh = SubResource("PlaneMesh_7o0f6")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_5dviu")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="JumpBtn" type="TouchScreenButton" parent="UI"]
+material = SubResource("ShaderMaterial_xjft4")
+position = Vector2(1664, 696)
+scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("8_f2ggm")
+texture_pressed = ExtResource("9_sauto")
+
+[node name="RunBtn" type="TouchScreenButton" parent="UI"]
+position = Vector2(1672, 520)
+scale = Vector2(0.1, 0.1)
+texture_normal = SubResource("CompressedTexture2D_hog30")
+texture_pressed = ExtResource("7_dsqgv")
+passby_press = true
+
+[node name="pick_hand" type="TouchScreenButton" parent="UI"]
+position = Vector2(1456, 688)
+scale = Vector2(0.15, 0.15)
+texture_normal = ExtResource("7_64030")
+texture_pressed = ExtResource("8_7j3a3")
+
+[node name="cross_hair" type="TextureRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_n1kko")
+expand_mode = 1
+
+[node name="free_look" type="TouchScreenButton" parent="UI"]
+position = Vector2(1696, 360)
+scale = Vector2(0.256, 0.24)
+texture_normal = ExtResource("7_j3s02")
+texture_pressed = ExtResource("7_j3s02")
+
+[node name="crouchBtn" type="TouchScreenButton" parent="UI"]
+position = Vector2(1808, 544)
+scale = Vector2(0.555556, 0.397163)
+texture_normal = ExtResource("8_ef66n")
+texture_pressed = ExtResource("9_tnfrb")
+
+[node name="flash" type="TouchScreenButton" parent="UI"]
+clip_children = 2
+position = Vector2(104, 48)
+scale = Vector2(0.34375, 0.328125)
+texture_normal = ExtResource("10_lgv21")
+texture_pressed = ExtResource("10_lgv21")
+passby_press = true
+
+[node name="burger" type="RigidBody3D" parent="." groups=["item"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68252, -7.019)
+gravity_scale = 0.1
+
+[node name="bunBottom" type="MeshInstance3D" parent="burger"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = SubResource("BoxMesh_s1uer")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="burger"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("BoxShape3D_mmvkt")
+
+[node name="Player" parent="." instance=ExtResource("10_f0vyi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -4)
+
+[node name="pick_up_ray" type="RayCast3D" parent="Player/Neck/Head/Eyes/Camera" index="0"]
+target_position = Vector3(0, 0, -2)
+hit_back_faces = false
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Player/Neck/Head/Eyes/Camera" index="1"]
+shape = SubResource("SphereShape3D_qfo0i")
+spring_length = -1.0
+
+[node name="pick_target" type="Marker3D" parent="Player/Neck/Head/Eyes/Camera/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+gizmo_extents = 0.01
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Neck/Head/Eyes/Camera/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+visible = false
+shape = SubResource("SphereShape3D_sfgq4")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Player/Neck/Head/Eyes/Camera" index="2"]
+light_energy = 2.055
+light_bake_mode = 0
+distance_fade_enabled = true
+spot_range = 6.704
+spot_angle = 30.29
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Player/Neck/Head/Eyes/Camera" index="3"]
+light_energy = 0.05
+light_bake_mode = 0
+omni_attenuation = 5.5008e-05
+omni_shadow_mode = 0
+
+[node name="pick_timer" type="Timer" parent="Player"]
+wait_time = 0.5
+
+[node name="Virtual Joystick" parent="." instance=ExtResource("5_3182p")]
+offset_top = -300.0
+offset_bottom = 0.0
+
+[node name="Base" parent="Virtual Joystick" index="0"]
+self_modulate = Color(0, 0, 0, 1)
+
+[connection signal="timeout" from="Player/pick_timer" to="Player" method="_on_pick_timer_timeout"]
+
+[editable path="Player"]
+[editable path="Virtual Joystick"]
